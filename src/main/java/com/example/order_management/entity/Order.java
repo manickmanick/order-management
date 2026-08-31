@@ -17,13 +17,12 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String order_number;
+    private String orderNumber;
 
     @Column(precision = 10, scale = 2)
     private BigDecimal amount;
 
     @ManyToOne
     @JoinColumn(name="customer_id")
-    @JsonIgnore
     private Customer customer;
 }

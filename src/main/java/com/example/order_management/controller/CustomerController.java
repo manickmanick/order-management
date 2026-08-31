@@ -1,7 +1,10 @@
 package com.example.order_management.controller;
 
 
+import com.example.order_management.dto.customer.AllCustomerDetailsResponse;
+import com.example.order_management.dto.customer.CustomerDetailResponse;
 import com.example.order_management.entity.Customer;
+import com.example.order_management.mapper.CustomerMapper;
 import com.example.order_management.repository.CustomerRepository;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,12 +25,14 @@ public class CustomerController {
     }
 
     @GetMapping
-    public List<Customer> getAllCustomers(){
-        return customerRepository.findAll();
+    public List<AllCustomerDetailsResponse> getAllCustomers(){
+        List<Customer> customers = customerRepository.findAll();
+        return CustomerMapper.toAllCustomerDetailsMapper(customers);
     }
 
     @GetMapping("/{customerId}")
-    public Customer getCustomerById(@PathVariable Long customerId){
-        return customerRepository.findById(customerId).orElseThrow(() -> new RuntimeException("Customer not found"));
+    public CustomerDetailResponse getCustomerById(@PathVariable Long customerId){
+        Customer customer = customerRepository.findById(customerId).orElseThrow(() -> new RuntimeException("Customer not found"));
+        return CustomerMapper.toResponse(customer);
     }
 }

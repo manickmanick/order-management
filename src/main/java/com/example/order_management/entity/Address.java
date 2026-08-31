@@ -26,7 +26,6 @@ public class Address {
     private String country;
 
     @OneToOne(mappedBy = "address")
-    @JsonIgnore
     private Customer customer;
 
 }
