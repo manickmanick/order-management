@@ -1,5 +1,6 @@
 package com.example.order_management.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.Getter;
@@ -23,5 +24,9 @@ public class Address {
     private String state;
 
     private String country;
+
+    @OneToOne(mappedBy = "address")
+    @JsonIgnore
+    private Customer customer;
 
 }
