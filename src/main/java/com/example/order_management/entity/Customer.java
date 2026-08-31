@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Entity
 @Table(name = "customer")
 @Data
@@ -22,5 +24,8 @@ public class Customer {
     @OneToOne
     @JoinColumn(name = "address_id")
     private Address address;
+
+    @OneToMany(mappedBy = "customer")
+    private List<Order> orders;
 
 }
