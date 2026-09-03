@@ -14,3 +14,4 @@ public class CustomerDetailResponse {
     private AddressResponse address;
     private List<OrderResponse> orders;
 }
+

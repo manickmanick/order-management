@@ -2,9 +2,11 @@ package com.example.order_management.controller;
 
 import com.example.order_management.dto.customer.AllCustomerDetailsResponse;
 import com.example.order_management.dto.customer.CustomerDetailResponse;
+import com.example.order_management.dto.customer.UpdateCustomerNameRequest;
 import com.example.order_management.entity.Customer;
 import com.example.order_management.mapper.CustomerMapper;
 import com.example.order_management.repository.CustomerRepository;
+import com.example.order_management.service.CustomerService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,13 +17,17 @@ public class CustomerController {
 
     private final CustomerRepository customerRepository;
     private final CustomerMapper customerMapper;
+    private final CustomerService customerService;
 
     public CustomerController(
             CustomerRepository customerRepository,
-            CustomerMapper customerMapper) {
+             CustomerService customerService,
+            CustomerMapper customerMapper
+            ) {
 
         this.customerRepository = customerRepository;
         this.customerMapper = customerMapper;
+        this.customerService = customerService;
     }
 
     @GetMapping
@@ -42,5 +48,14 @@ public class CustomerController {
 
         System.out.println("ADDRESS = " + customer.getAddress().getCity());
         return customerMapper.toResponse(customer);
+    }
+
+    @PutMapping("/{customerId}/name")
+    public String updateName(@PathVariable Long customerId,@RequestBody UpdateCustomerNameRequest request){
+        customerService.updateCustomerName(
+                customerId,
+                request.getName()
+        );
+        return "updated";
     }
 }
