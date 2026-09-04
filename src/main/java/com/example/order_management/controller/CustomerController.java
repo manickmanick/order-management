@@ -58,4 +58,17 @@ public class CustomerController {
         );
         return "updated";
     }
+
+    @GetMapping("/{customerId}/mergeLearning")
+    public String mergeLearning(@PathVariable Long customerId){
+        customerService.mergeLearning(customerId);
+        return "checking merge learning";
+    }
+
+    @GetMapping("/{customerId}/flush")
+    public String testFlush(@PathVariable Long customerId){
+        customerService.testFlush(customerId);
+        return "Checking flushing";
+    }
+
 }
