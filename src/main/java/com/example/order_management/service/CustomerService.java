@@ -54,4 +54,20 @@ public class CustomerService {
         System.out.println("================ after flush ======================");
     }
 
+    @Transactional
+    public void testTransactional(Long customerId){
+        Customer customer = entityManager.find(Customer.class,customerId);
+
+        if(customer == null){{
+            throw new RuntimeException("Customer not found");
+        }}
+
+        System.out.println("======= before flush ============");
+        customer.setName("manick");
+        entityManager.flush();
+        System.out.println("======== after flush ===========");
+
+        throw new RuntimeException("error happened");
+    }
+
 }

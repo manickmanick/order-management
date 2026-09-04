@@ -71,4 +71,10 @@ public class CustomerController {
         return "Checking flushing";
     }
 
+    @GetMapping("/{customerId}/rollbackLearning")
+    public String testTransactional(@PathVariable Long customerId){
+        customerService.testTransactional(customerId);
+        return "Learning rollback exeeption";
+    }
+
 }
