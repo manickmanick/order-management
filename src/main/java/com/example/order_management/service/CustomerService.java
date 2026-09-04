@@ -85,4 +85,18 @@ public class CustomerService {
         entityManager.flush();
     }
 
+    @Transactional
+    public void deleteCustomer(Long customerId) {
+
+        Customer customer =
+                entityManager.find(Customer.class, customerId);
+
+//        System.out.println(customer);
+        if (customer == null) {
+            throw new RuntimeException("Customer not found");
+        }
+
+        entityManager.remove(customer);
+    }
+
 }
