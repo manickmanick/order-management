@@ -9,6 +9,8 @@ public class CreateCustomer {
 
     public String name;
     public String email;
-    public Long addressId;
-
+    public String street;
+    public String city;
+    public String state;
+    public String country;
 }

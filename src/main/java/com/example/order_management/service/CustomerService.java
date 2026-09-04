@@ -1,6 +1,7 @@
 package com.example.order_management.service;
 
 import com.example.order_management.dto.customer.CreateCustomer;
+import com.example.order_management.entity.Address;
 import com.example.order_management.entity.Customer;
 import jakarta.persistence.EntityManager;
 import org.springframework.stereotype.Service;
@@ -75,10 +76,18 @@ public class CustomerService {
     public void createCustomer(CreateCustomer body) {
 
         Customer customer = new Customer();
+        Address address = new Address();
 
         customer.setName(body.getName());
         customer.setEmail(body.getEmail());
-//        customer.setAddress(body.getAddressId());
+
+        address.setStreet(body.getStreet());
+        address.setCity(body.getCity());
+        address.setState(body.getState());
+        address.setCountry(body.getCountry());
+
+        customer.setAddress(address);
+        address.setCustomer(customer);
 
         entityManager.persist(customer);
 
@@ -97,6 +106,19 @@ public class CustomerService {
         }
 
         entityManager.remove(customer);
+    }
+
+    @Transactional
+    public void deleteAddress(Long customerId){
+        Customer customer =
+                entityManager.find(Customer.class, customerId);
+
+//        System.out.println(customer);
+        if (customer == null) {
+            throw new RuntimeException("Customer not found");
+        }
+
+        customer.setAddress(null);
     }
 
 }

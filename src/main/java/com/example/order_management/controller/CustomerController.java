@@ -90,4 +90,10 @@ public class CustomerController {
         return "user was deleted successfully";
     }
 
+    @GetMapping("/{customerId}/deleteAddress")
+    public String deleteAddress(@PathVariable  Long customerId){
+        customerService.deleteAddress(customerId);
+        return "deleted address successfully.";
+    }
+
 }
