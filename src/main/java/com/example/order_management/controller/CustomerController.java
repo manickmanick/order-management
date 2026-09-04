@@ -1,6 +1,7 @@
 package com.example.order_management.controller;
 
 import com.example.order_management.dto.customer.AllCustomerDetailsResponse;
+import com.example.order_management.dto.customer.CreateCustomer;
 import com.example.order_management.dto.customer.CustomerDetailResponse;
 import com.example.order_management.dto.customer.UpdateCustomerNameRequest;
 import com.example.order_management.entity.Customer;
@@ -75,6 +76,12 @@ public class CustomerController {
     public String testTransactional(@PathVariable Long customerId){
         customerService.testTransactional(customerId);
         return "Learning rollback exeeption";
+    }
+
+    @PostMapping("/createCustomer")
+    public String createCustomer(@RequestBody CreateCustomer body){
+        customerService.createCustomer(body);
+        return "Customer was created.";
     }
 
 }

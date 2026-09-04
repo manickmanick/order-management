@@ -1,5 +1,6 @@
 package com.example.order_management.service;
 
+import com.example.order_management.dto.customer.CreateCustomer;
 import com.example.order_management.entity.Customer;
 import jakarta.persistence.EntityManager;
 import org.springframework.stereotype.Service;
@@ -68,6 +69,20 @@ public class CustomerService {
         System.out.println("======== after flush ===========");
 
         throw new RuntimeException("error happened");
+    }
+
+    @Transactional
+    public void createCustomer(CreateCustomer body) {
+
+        Customer customer = new Customer();
+
+        customer.setName(body.getName());
+        customer.setEmail(body.getEmail());
+//        customer.setAddress(body.getAddressId());
+
+        entityManager.persist(customer);
+
+        entityManager.flush();
     }
 
 }
