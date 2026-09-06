@@ -2,6 +2,7 @@ package com.example.order_management.mapper;
 
 import com.example.order_management.dto.customer.AllCustomerDetailsResponse;
 import com.example.order_management.dto.customer.CustomerDetailResponse;
+import com.example.order_management.dto.product.ProductCustomerResponse;
 import com.example.order_management.entity.Customer;
 import org.mapstruct.Mapper;
 
@@ -23,4 +24,6 @@ public interface CustomerMapper {
     List<AllCustomerDetailsResponse> toAllCustomerDetailsResponse(
             List<Customer> customers
     );
+
+    ProductCustomerResponse toProductCustomerResponse(Customer customer);
 }
