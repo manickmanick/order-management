@@ -1,99 +1,67 @@
 package com.example.order_management.controller;
 
-import com.example.order_management.dto.customer.AllCustomerDetailsResponse;
-import com.example.order_management.dto.customer.CreateCustomer;
-import com.example.order_management.dto.customer.CustomerDetailResponse;
-import com.example.order_management.dto.customer.UpdateCustomerNameRequest;
-import com.example.order_management.entity.Customer;
-import com.example.order_management.mapper.CustomerMapper;
-import com.example.order_management.repository.CustomerRepository;
+import com.example.order_management.dto.customer.CustomerSummaryResponse;
+import com.example.order_management.dto.customer.CustomerWithOrdersResponse;
 import com.example.order_management.service.CustomerService;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
 @RequestMapping("/customers")
 public class CustomerController {
-
-    private final CustomerRepository customerRepository;
-    private final CustomerMapper customerMapper;
     private final CustomerService customerService;
 
-    public CustomerController(
-            CustomerRepository customerRepository,
-             CustomerService customerService,
-            CustomerMapper customerMapper
-            ) {
-
-        this.customerRepository = customerRepository;
-        this.customerMapper = customerMapper;
+    public CustomerController(CustomerService customerService) {
         this.customerService = customerService;
     }
 
-    @GetMapping
-    public List<AllCustomerDetailsResponse> getAllCustomers() {
 
-        List<Customer> customers = customerRepository.findAll();
+    // 1. Normal JPQL
+    @GetMapping("/jpql")
+    public List<CustomerSummaryResponse> getAllCustomers() {
 
-        return customerMapper.toAllCustomerDetailsResponse(customers);
+        return customerService.getAllCustomers();
     }
 
-    @GetMapping("/{customerId}")
-    public CustomerDetailResponse getCustomerById(
-            @PathVariable Long customerId) {
 
-        Customer customer = customerRepository.findById(customerId)
-                .orElseThrow(() ->
-                        new RuntimeException("Customer not found"));
+    // 2. INNER JOIN
+    @GetMapping("/join/orders")
+    public List<CustomerWithOrdersResponse>
+    getCustomersUsingJoin() {
 
-        System.out.println("ADDRESS = " + customer.getAddress().getCity());
-        return customerMapper.toResponse(customer);
+        return customerService.getCustomersUsingJoin();
     }
 
-    @PutMapping("/{customerId}/name")
-    public String updateName(@PathVariable Long customerId,@RequestBody UpdateCustomerNameRequest request){
-        customerService.updateCustomerName(
-                customerId,
-                request.getName()
-        );
-        return "updated";
+
+    // 3. INNER JOIN FETCH
+    @GetMapping("/join-fetch/orders")
+    public List<CustomerWithOrdersResponse>
+    getCustomersWithOrders() {
+
+        return customerService.getCustomersWithOrders();
     }
 
-    @GetMapping("/{customerId}/mergeLearning")
-    public String mergeLearning(@PathVariable Long customerId){
-        customerService.mergeLearning(customerId);
-        return "checking merge learning";
+
+    // 4. LEFT JOIN FETCH
+    @GetMapping("/left-join-fetch/orders")
+    public List<CustomerWithOrdersResponse>
+    getAllCustomersWithOrders() {
+
+        return customerService.getAllCustomersWithOrders();
     }
 
-    @GetMapping("/{customerId}/flush")
-    public String testFlush(@PathVariable Long customerId){
-        customerService.testFlush(customerId);
-        return "Checking flushing";
-    }
 
-    @GetMapping("/{customerId}/rollbackLearning")
-    public String testTransactional(@PathVariable Long customerId){
-        customerService.testTransactional(customerId);
-        return "Learning rollback exeeption";
-    }
+    // 5. WHERE + JOIN
+    @GetMapping("/large-orders")
+    public List<CustomerWithOrdersResponse>
+    getCustomersWithLargeOrders(
+            @RequestParam BigDecimal amount) {
 
-    @PostMapping("/createCustomer")
-    public String createCustomer(@RequestBody CreateCustomer body){
-        customerService.createCustomer(body);
-        return "Customer was created.";
+        return customerService.getCustomersWithLargeOrders(amount);
     }
-
-    @GetMapping("/{customerId}/delete")
-    public String deleteCustomer(@PathVariable  Long customerId){
-        customerService.deleteCustomer(customerId);
-        return "user was deleted successfully";
-    }
-
-    @GetMapping("/{customerId}/deleteAddress")
-    public String deleteAddress(@PathVariable  Long customerId){
-        customerService.deleteAddress(customerId);
-        return "deleted address successfully.";
-    }
-
 }

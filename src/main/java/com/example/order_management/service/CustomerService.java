@@ -1,124 +1,97 @@
 package com.example.order_management.service;
 
-import com.example.order_management.dto.customer.CreateCustomer;
-import com.example.order_management.entity.Address;
+import com.example.order_management.dto.customer.CustomerSummaryResponse;
+import com.example.order_management.dto.customer.CustomerWithOrdersResponse;
 import com.example.order_management.entity.Customer;
-import jakarta.persistence.EntityManager;
+import com.example.order_management.mapper.CustomerMapper;
+import com.example.order_management.repository.CustomerRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.math.BigDecimal;
+import java.util.List;
 
 @Service
 public class CustomerService {
 
-    private final EntityManager entityManager;
+    private final CustomerRepository customerRepository;
+    private final CustomerMapper customerMapper;
 
-    public CustomerService(EntityManager entityManager){
-        this.entityManager = entityManager;
+    public CustomerService(
+            CustomerRepository customerRepository,
+            CustomerMapper customerMapper) {
+
+        this.customerRepository = customerRepository;
+        this.customerMapper = customerMapper;
     }
 
-    @Transactional
-    public void updateCustomerName(Long customerId,String name){
-        Customer customer = entityManager.find(Customer.class,customerId);
+    //1.normal findAll
+    @Transactional(readOnly = true)
+    public List<CustomerSummaryResponse> getAllCustomers(){
+        List<Customer> customers = customerRepository.findAllCustomers();
 
-        if (customer == null) {
-            throw new RuntimeException("Customer not found");
-        }
-
-        System.out.println(customer.getName());
-        customer.setName(name);
+        return customers.stream()
+                .map(customerMapper::toSummaryResponse)
+                .toList();
 
 
     }
 
-    @Transactional
-    public void mergeLearning(Long customerId){
-       Customer customer = entityManager.find(Customer.class,customerId);
+    // 2. Normal INNER JOIN
+    @Transactional(readOnly = true)
+    public List<CustomerWithOrdersResponse>
+    getCustomersUsingJoin() {
 
-       if(customer == null){
-           throw new RuntimeException("Customernot found");
-       }
-        System.out.println(customer.getName());
-       entityManager.detach(customer);
-       Customer customer1 = entityManager.merge(customer);
-        customer1.setName("manick");
+        List<Customer> customers =
+                customerRepository.findCustomersWithOrdersUsingJoin();
+
+        return customers.stream()
+                .map(customerMapper::toWithOrdersResponse)
+                .toList();
     }
 
-    @Transactional
-    public void testFlush(Long customerId){
-        Customer customer = entityManager.find(Customer.class,customerId);
 
-        if(customer == null){
-            throw new RuntimeException("Customer not found");
-        }
-        System.out.println("================== before flush ==================");
-        customer.setName("manickaperumal");
-        entityManager.flush();
-        System.out.println("================ after flush ======================");
+    // 3. INNER JOIN FETCH
+    @Transactional(readOnly = true)
+    public List<CustomerWithOrdersResponse>
+    getCustomersWithOrders() {
+
+        List<Customer> customers =
+                customerRepository.findCustomersWithOrders();
+
+        return customers.stream()
+                .map(customerMapper::toWithOrdersResponse)
+                .toList();
     }
 
-    @Transactional
-    public void testTransactional(Long customerId){
-        Customer customer = entityManager.find(Customer.class,customerId);
 
-        if(customer == null){{
-            throw new RuntimeException("Customer not found");
-        }}
+    // 4. LEFT JOIN FETCH
+    @Transactional(readOnly = true)
+    public List<CustomerWithOrdersResponse>
+    getAllCustomersWithOrders() {
 
-        System.out.println("======= before flush ============");
-        customer.setName("manick");
-        entityManager.flush();
-        System.out.println("======== after flush ===========");
+        List<Customer> customers =
+                customerRepository.findAllCustomersWithOrders();
 
-        throw new RuntimeException("error happened");
+        return customers.stream()
+                .map(customerMapper::toWithOrdersResponse)
+                .toList();
     }
 
-    @Transactional
-    public void createCustomer(CreateCustomer body) {
 
-        Customer customer = new Customer();
-        Address address = new Address();
+    // 5. Customers with large orders
+    @Transactional(readOnly = true)
+    public List<CustomerWithOrdersResponse>
+    getCustomersWithLargeOrders(BigDecimal amount) {
 
-        customer.setName(body.getName());
-        customer.setEmail(body.getEmail());
+        List<Customer> customers =
+                customerRepository.findCustomersWithLargeOrders(amount);
 
-        address.setStreet(body.getStreet());
-        address.setCity(body.getCity());
-        address.setState(body.getState());
-        address.setCountry(body.getCountry());
-
-        customer.setAddress(address);
-        address.setCustomer(customer);
-
-        entityManager.persist(customer);
-
-        entityManager.flush();
+        return customers.stream()
+                .map(customerMapper::toWithOrdersResponse)
+                .toList();
     }
 
-    @Transactional
-    public void deleteCustomer(Long customerId) {
 
-        Customer customer =
-                entityManager.find(Customer.class, customerId);
-
-//        System.out.println(customer);
-        if (customer == null) {
-            throw new RuntimeException("Customer not found");
-        }
-
-        entityManager.remove(customer);
-    }
-
-    @Transactional
-    public void deleteAddress(Long customerId){
-        Customer customer =
-                entityManager.find(Customer.class, customerId);
-
-//        System.out.println(customer);
-        if (customer == null) {
-            throw new RuntimeException("Customer not found");
-        }
-
-        customer.setAddress(null);
-    }
 
 }
