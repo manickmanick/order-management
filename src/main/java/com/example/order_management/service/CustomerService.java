@@ -7,6 +7,7 @@ import com.example.order_management.mapper.CustomerMapper;
 import com.example.order_management.repository.CustomerRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -118,6 +119,27 @@ public class CustomerService {
                 customerRepository.findCustomersWithOrders(pageable);
 
         return customers.map(customerMapper::toWithOrdersResponse);
+    }
+
+    @Transactional(readOnly = true)
+    public void testNPlusOne() {
+
+        List<Customer> customers = customerRepository.findAll();
+
+        for (Customer customer : customers) {
+            System.out.println(
+                    "Customer ID: " + customer.getId()
+                            + ", Orders: " + customer.getOrders().size()
+            );
+        }
+    }
+
+    @Transactional(readOnly = true)
+    public Slice<CustomerSummaryResponse> getCustomers2(Pageable pageable){
+        Slice<Customer> customers = customerRepository.findBy(pageable);
+
+        return customers.map(customerMapper::toSummaryResponse);
+
     }
 
 }

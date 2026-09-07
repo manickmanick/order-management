@@ -5,6 +5,7 @@ import com.example.order_management.dto.customer.CustomerWithOrdersResponse;
 import com.example.order_management.service.CustomerService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -85,5 +86,19 @@ public class CustomerController {
             @PageableDefault(size = 2) Pageable pageable) {
 
         return customerService.getCustomersWithOrders(pageable);
+    }
+
+    @GetMapping("/batch-test")
+    public String testBatchFetching() {
+
+        customerService.testNPlusOne();
+
+        return "Check the console for SQL queries";
+    }
+
+    @GetMapping("/slice")
+    public Slice<CustomerSummaryResponse> getCustomers2(
+            @PageableDefault(size = 10) Pageable pageable){
+        return customerService.getCustomers2(pageable);
     }
 }

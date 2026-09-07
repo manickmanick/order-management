@@ -4,6 +4,7 @@ import com.example.order_management.entity.Customer;
 import com.example.order_management.entity.Order;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -85,5 +86,7 @@ public interface CustomerRepository extends JpaRepository<Customer,Long> {
         JOIN FETCH c.orders
         """)
     Page<Customer> findCustomersWithOrders(Pageable pageable);
+
+    Slice<Customer> findBy(Pageable pageable);
 
 }

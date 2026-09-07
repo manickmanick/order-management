@@ -4,6 +4,7 @@ package com.example.order_management.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.BatchSize;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +28,7 @@ public class Customer {
     private Address address;
 
     @OneToMany(mappedBy = "customer",cascade = CascadeType.ALL)
+    @BatchSize(size = 10)
     private List<Order> orders;
 
     @ManyToMany
