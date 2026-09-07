@@ -3,6 +3,9 @@ package com.example.order_management.controller;
 import com.example.order_management.dto.customer.CustomerSummaryResponse;
 import com.example.order_management.dto.customer.CustomerWithOrdersResponse;
 import com.example.order_management.service.CustomerService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -68,5 +71,19 @@ public class CustomerController {
     @GetMapping("/findAllCustomersUsingEntityGraph")
     public List<CustomerWithOrdersResponse> findAllCustomersUsingEntityGraph(){
         return customerService.findAllCustomersUsingEntityGraph();
+    }
+
+    @GetMapping("/pagination")
+    public Page<CustomerSummaryResponse> getCustomers(
+          @PageableDefault(size=20) Pageable pageable
+    ){
+    return customerService.getCustomers(pageable);
+    }
+
+    @GetMapping("/pagination/orders")
+    public Page<CustomerWithOrdersResponse> getCustomersWithOrders(
+            @PageableDefault(size = 2) Pageable pageable) {
+
+        return customerService.getCustomersWithOrders(pageable);
     }
 }

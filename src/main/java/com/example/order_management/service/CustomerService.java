@@ -5,6 +5,8 @@ import com.example.order_management.dto.customer.CustomerWithOrdersResponse;
 import com.example.order_management.entity.Customer;
 import com.example.order_management.mapper.CustomerMapper;
 import com.example.order_management.repository.CustomerRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -101,5 +103,21 @@ public class CustomerService {
                 .toList();
     }
 
+    @Transactional(readOnly = true)
+    public Page<CustomerSummaryResponse> getCustomers(Pageable pageable){
+        Page<Customer> customers = customerRepository.findAll(pageable);
+
+        return customers.map(customerMapper::toSummaryResponse);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<CustomerWithOrdersResponse> getCustomersWithOrders(
+            Pageable pageable) {
+
+        Page<Customer> customers =
+                customerRepository.findCustomersWithOrders(pageable);
+
+        return customers.map(customerMapper::toWithOrdersResponse);
+    }
 
 }
