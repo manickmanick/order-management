@@ -92,8 +92,8 @@ public interface CustomerRepository extends JpaRepository<Customer,Long> {
 
 
     @Query(value = """
-    SELECT * FROM customer WHERE email = :email
+    SELECT * FROM customer WHERE email = ?1
 """,nativeQuery = true)
-    Optional<Customer> findCustomerByEmailNative(@Param("email") String email);
+    Optional<Customer> findCustomerByEmailNative( String email);
 
 }
