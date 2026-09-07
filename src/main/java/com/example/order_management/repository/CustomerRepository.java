@@ -1,6 +1,8 @@
 package com.example.order_management.repository;
 
 import com.example.order_management.entity.Customer;
+import com.example.order_management.entity.Order;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -51,5 +53,25 @@ public interface CustomerRepository extends JpaRepository<Customer,Long> {
     where o.amount > :amount
 """)
     List<Customer> findCustomersWithLargeOrders(@Param("amount")BigDecimal amount);
+
+    @EntityGraph(attributePaths = "orders")
+    @Override
+    List<Customer> findAll();
+
+    Customer findByEmail(String email);
+
+    Customer findByNameAndEmail();
+
+    List<Customer> findByNameOrEmail(String name,String email);
+
+    List<Customer> findByNameContaining(String name);
+
+    List<Order> findByNameOrderByEmailAsc(String name);
+
+    Customer findFirstByName(String name);
+
+    List<Customer> findTop5ByOrderedByName();
+
+    List<Customer> findByAddress_city(String city);
 
 }

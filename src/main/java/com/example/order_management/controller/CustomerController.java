@@ -64,4 +64,9 @@ public class CustomerController {
 
         return customerService.getCustomersWithLargeOrders(amount);
     }
+
+    @GetMapping("/findAllCustomersUsingEntityGraph")
+    public List<CustomerWithOrdersResponse> findAllCustomersUsingEntityGraph(){
+        return customerService.findAllCustomersUsingEntityGraph();
+    }
 }

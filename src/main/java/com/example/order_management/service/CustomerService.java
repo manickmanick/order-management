@@ -92,6 +92,14 @@ public class CustomerService {
                 .toList();
     }
 
+    @Transactional(readOnly = true)
+    public List<CustomerWithOrdersResponse> findAllCustomersUsingEntityGraph(){
+        List<Customer> customers = customerRepository.findAll();
+
+        return customers.stream()
+                .map(customerMapper::toWithOrdersResponse)
+                .toList();
+    }
 
 
 }
