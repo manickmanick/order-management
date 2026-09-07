@@ -12,6 +12,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 
 
 public interface CustomerRepository extends JpaRepository<Customer,Long> {
@@ -88,5 +89,11 @@ public interface CustomerRepository extends JpaRepository<Customer,Long> {
     Page<Customer> findCustomersWithOrders(Pageable pageable);
 
     Slice<Customer> findBy(Pageable pageable);
+
+
+    @Query(value = """
+    SELECT * FROM customer WHERE email = :email
+""",nativeQuery = true)
+    Optional<Customer> findCustomerByEmailNative(@Param("email") String email);
 
 }

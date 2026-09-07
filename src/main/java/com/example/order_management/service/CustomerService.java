@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CustomerService {
@@ -139,6 +140,15 @@ public class CustomerService {
         Slice<Customer> customers = customerRepository.findBy(pageable);
 
         return customers.map(customerMapper::toSummaryResponse);
+
+    }
+
+   public CustomerSummaryResponse findCustomerByEmailNative(String email){
+       return customerRepository
+               .findCustomerByEmailNative(email)
+               .map(customerMapper::toSummaryResponse)
+               .orElseThrow(() ->
+                       new RuntimeException("Customer with this email was not found"));
 
     }
 

@@ -7,10 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -100,5 +97,10 @@ public class CustomerController {
     public Slice<CustomerSummaryResponse> getCustomers2(
             @PageableDefault(size = 10) Pageable pageable){
         return customerService.getCustomers2(pageable);
+    }
+
+    @GetMapping("/native/{email}")
+    public CustomerSummaryResponse findCustomerByEmailNative(@PathVariable("email") String email){
+        return customerService.findCustomerByEmailNative(email);
     }
 }
