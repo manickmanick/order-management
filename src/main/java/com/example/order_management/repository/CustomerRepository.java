@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -115,4 +116,12 @@ public interface CustomerRepository extends JpaRepository<Customer,Long> {
     FROM Customer c
     """)
     List<CustomerSummaryProjection> findCustomerSummariesUsingProjection();
+
+    @Modifying(clearAutomatically = true,flushAutomatically = true)
+    @Query("""
+    UPDATE Customer c
+    SET c.name = :name
+    WHERE c.id = :id
+""")
+    int updateCustomerName(@Param("id") Long id, @Param("name") String name);
 }

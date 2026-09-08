@@ -114,4 +114,9 @@ public class CustomerController {
     public List<CustomerSummaryProjection> findCustomerSummariesUsingProjection(){
         return customerService.findCustomerSummariesUsingProjection();
     }
+
+    @GetMapping("/{id}/updateCustomerName/{name}")
+    public String updateCustomerName(@PathVariable("name") String name,@PathVariable("id") Long id){
+        return customerService.updateCustomerName(name,id);
+    }
 }

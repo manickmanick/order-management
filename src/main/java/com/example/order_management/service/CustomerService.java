@@ -161,4 +161,9 @@ public class CustomerService {
         return customerRepository.findCustomerSummariesUsingProjection();
     }
 
+    @Transactional
+    public String updateCustomerName(String name,Long id){
+        int count = customerRepository.updateCustomerName(id,name);
+        return count + "Rows were affected";
+    }
 }
