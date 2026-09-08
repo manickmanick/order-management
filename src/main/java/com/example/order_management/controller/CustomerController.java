@@ -1,5 +1,6 @@
 package com.example.order_management.controller;
 
+import com.example.order_management.dto.customer.CustomerSummaryProjection;
 import com.example.order_management.dto.customer.CustomerSummaryResponse;
 import com.example.order_management.dto.customer.CustomerWithOrdersResponse;
 import com.example.order_management.service.CustomerService;
@@ -107,5 +108,10 @@ public class CustomerController {
     @GetMapping("/findCustomerSummaries")
     public List<CustomerSummaryResponse> findCustomerSummaries(){
         return customerService.findCustomerSummaries();
+    }
+
+    @GetMapping("/findCustomerSummariesUsingProjection")
+    public List<CustomerSummaryProjection> findCustomerSummariesUsingProjection(){
+        return customerService.findCustomerSummariesUsingProjection();
     }
 }

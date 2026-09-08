@@ -1,5 +1,6 @@
 package com.example.order_management.service;
 
+import com.example.order_management.dto.customer.CustomerSummaryProjection;
 import com.example.order_management.dto.customer.CustomerSummaryResponse;
 import com.example.order_management.dto.customer.CustomerWithOrdersResponse;
 import com.example.order_management.entity.Customer;
@@ -154,6 +155,10 @@ public class CustomerService {
 
     public List<CustomerSummaryResponse> findCustomerSummaries(){
         return customerRepository.findCustomerSummaries();
+    }
+
+    public List<CustomerSummaryProjection> findCustomerSummariesUsingProjection(){
+        return customerRepository.findCustomerSummariesUsingProjection();
     }
 
 }

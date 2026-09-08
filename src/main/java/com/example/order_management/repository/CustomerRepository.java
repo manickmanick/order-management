@@ -1,5 +1,6 @@
 package com.example.order_management.repository;
 
+import com.example.order_management.dto.customer.CustomerSummaryProjection;
 import com.example.order_management.dto.customer.CustomerSummaryResponse;
 import com.example.order_management.entity.Customer;
 import com.example.order_management.entity.Order;
@@ -106,4 +107,12 @@ public interface CustomerRepository extends JpaRepository<Customer,Long> {
     ) FROM Customer c
 """)
     List<CustomerSummaryResponse> findCustomerSummaries();
+
+    @Query("""
+    SELECT c.id AS id,
+           c.name AS name,
+           c.email AS email
+    FROM Customer c
+    """)
+    List<CustomerSummaryProjection> findCustomerSummariesUsingProjection();
 }
