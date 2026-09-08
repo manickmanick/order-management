@@ -1,0 +1,6 @@
+CREATE TABLE audit_log(
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    action VARCHAR(100) NOT NULL,
+    message VARCHAR(500),
+    created_at DATETIME NOT NULL
+)
