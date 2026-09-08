@@ -1,5 +1,6 @@
 package com.example.order_management.repository;
 
+import com.example.order_management.dto.customer.CustomerSummaryResponse;
 import com.example.order_management.entity.Customer;
 import com.example.order_management.entity.Order;
 import org.springframework.data.domain.Page;
@@ -96,4 +97,13 @@ public interface CustomerRepository extends JpaRepository<Customer,Long> {
 """,nativeQuery = true)
     Optional<Customer> findCustomerByEmailNative( String email);
 
+
+    @Query("""
+    SELECT new com.example.order_management.dto.customer.CustomerSummaryResponse(
+    c.id,
+    c.name,
+    c.email
+    ) FROM Customer c
+""")
+    List<CustomerSummaryResponse> findCustomerSummaries();
 }

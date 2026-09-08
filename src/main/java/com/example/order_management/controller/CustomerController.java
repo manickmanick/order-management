@@ -103,4 +103,9 @@ public class CustomerController {
     public CustomerSummaryResponse findCustomerByEmailNative(@PathVariable("email") String email){
         return customerService.findCustomerByEmailNative(email);
     }
+
+    @GetMapping("/findCustomerSummaries")
+    public List<CustomerSummaryResponse> findCustomerSummaries(){
+        return customerService.findCustomerSummaries();
+    }
 }

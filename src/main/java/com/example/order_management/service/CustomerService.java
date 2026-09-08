@@ -152,4 +152,8 @@ public class CustomerService {
 
     }
 
+    public List<CustomerSummaryResponse> findCustomerSummaries(){
+        return customerRepository.findCustomerSummaries();
+    }
+
 }
