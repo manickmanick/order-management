@@ -22,6 +22,9 @@ public class Order {
     @Column(precision = 10, scale = 2)
     private BigDecimal amount;
 
+    @Version
+    private Long version;
+
     @ManyToOne
     @JoinColumn(name="customer_id")
     private Customer customer;
